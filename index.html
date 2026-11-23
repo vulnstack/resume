@@ -1,233 +1,562 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>小峰聊Ai · 网络安全专家</title>
-<meta name="description" content="9 年网络安全从业 · 攻防演练 / 安全运营 / 安全能力产品化">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%2355198b'/%3E%3Ctext x='12' y='17' font-family='sans-serif' font-size='13' fill='%23fff' text-anchor='middle'%3E安%3C/text%3E%3C/svg%3E">
 <style>
+@font-face{font-family:Montserrat;font-style:normal;font-weight:300;font-display:swap;src:url(assets/fonts/montserrat-300.woff2) format("woff2")}
+@font-face{font-family:Montserrat;font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/montserrat-400.woff2) format("woff2")}
+@font-face{font-family:Montserrat;font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/montserrat-500.woff2) format("woff2")}
+@font-face{font-family:Montserrat;font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/montserrat-600.woff2) format("woff2")}
+@font-face{font-family:Montserrat;font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/montserrat-700.woff2) format("woff2")}
+
 :root{
-  --bg:#0a0e14; --bg2:#0f1620; --panel:#111a26; --line:#1e2d3f;
-  --cyan:#00e5ff; --purple:#7c6cff; --red:#ff4d5e; --gold:#ffb02e;
-  --txt:#d7e2ee; --sub:#8195ab; --dim:#5a6b80;
-  --mono:"SF Mono","JetBrains Mono","Cascadia Code",Consolas,monospace;
-  --sans:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --button:#55198b; --button-hover:#8c43ce;
+  --title:#000; --text:#000; --sub:#868e96; --card-sub:#666;
+  --bg:#fff; --bg-alt:#f5f2f4; --card:#fff;
+  --shadow:0 10px 30px rgba(0,0,0,.08);
+  --shadow-sm:0 4px 14px rgba(0,0,0,.06);
+  --border:rgba(211,211,211,.397);
+  --meter-bg:rgb(243,239,239); --meter:#aaa5ff;
+  --font:Montserrat,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
 }
-*{margin:0;padding:0;box-sizing:border-box}
+[data-theme="dark"]{
+  --title:#fff; --text:#fff; --sub:#a8b0bd; --card-sub:#c3c9d4;
+  --bg:#171c28; --bg-alt:#1e2433; --card:#1f2637;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+  --shadow-sm:0 4px 14px rgba(0,0,0,.35);
+  --border:rgba(255,255,255,.12);
+  --meter-bg:#2b3242; --meter:#8f7bff;
+}
+*{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.7;overflow-x:hidden}
-#net{position:fixed;inset:0;z-index:0;opacity:.55}
-.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
-section{padding:72px 0}
-.tag{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--cyan);border:1px solid rgba(0,229,255,.35);border-radius:3px;padding:2px 10px;letter-spacing:2px}
-h2.sec{font-size:26px;font-weight:700;margin:14px 0 34px;display:flex;align-items:center;gap:12px}
-h2.sec::before{content:"";width:6px;height:26px;background:linear-gradient(180deg,var(--cyan),var(--purple));border-radius:3px}
-h2.sec .en{font-family:var(--mono);font-size:12px;color:var(--dim);font-weight:400;letter-spacing:3px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{width:90%;max-width:1220px;margin:0 auto}
 
-/* ---- hero ---- */
-header{min-height:100vh;display:flex;align-items:center;position:relative;z-index:1}
-.hero-line{font-family:var(--mono);font-size:13px;color:var(--sub);margin-bottom:18px}
-.hero-line .p{color:var(--cyan)}
-h1{font-size:clamp(42px,7vw,72px);font-weight:800;letter-spacing:2px;background:linear-gradient(92deg,#fff 20%,var(--cyan) 55%,var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px}
-.role{font-size:clamp(16px,2.4vw,22px);color:var(--txt);font-weight:600;margin-bottom:8px}
-#typed{font-family:var(--mono);font-size:14px;color:var(--cyan);min-height:24px}
-#typed::after{content:"▌";animation:blink 1s step-end infinite;color:var(--cyan)}
-@keyframes blink{50%{opacity:0}}
-.hero-desc{max-width:640px;color:var(--sub);margin:22px 0 30px;font-size:15px}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
-.btn{font-family:var(--mono);font-size:14px;padding:11px 26px;border-radius:6px;text-decoration:none;transition:.25s;letter-spacing:1px}
-.btn-pri{background:linear-gradient(92deg,var(--cyan),var(--purple));color:#04121a;font-weight:700;box-shadow:0 0 24px rgba(0,229,255,.25)}
-.btn-pri:hover{transform:translateY(-2px);box-shadow:0 0 36px rgba(0,229,255,.45)}
-.btn-ghost{border:1px solid var(--line);color:var(--txt)}
-.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+/* header */
+.header{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .3s,box-shadow .3s,backdrop-filter .3s}
+.header.on{background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);box-shadow:0 1px 8px rgba(0,0,0,.08)}
+.header__in{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 5%}
+.logo{font-family:Montserrat,"PingFang SC",sans-serif;font-style:italic;font-size:23px;font-weight:700;color:var(--button);letter-spacing:-.01em;white-space:nowrap}
+[data-theme="dark"] .logo{color:#c9a6ff}
+.menu{display:flex;align-items:center;gap:26px;font-size:15px;font-weight:500;color:var(--title)}
+.menu a{position:relative;padding:6px 0;transition:color .2s}
+.menu a:hover{color:var(--button)}
+[data-theme="dark"] .menu a:hover{color:#c9a6ff}
+.menu a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s}
+.menu a:hover::after{transform:scaleX(1)}
+.toggle{width:38px;height:38px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:grid;place-items:center;font-size:17px;color:var(--title)}
+.toggle:hover{background:rgba(0,0,0,.05)}
+[data-theme="dark"] .toggle:hover{background:rgba(255,255,255,.08)}
+@media (max-width:900px){.menu{display:none}}
 
-/* ---- stats ---- */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:64px}
-.stat{background:linear-gradient(160deg,rgba(17,26,38,.9),rgba(15,22,32,.7));border:1px solid var(--line);border-radius:12px;padding:22px 20px;position:relative;overflow:hidden;transition:.3s}
-.stat:hover{transform:translateY(-4px);border-color:rgba(0,229,255,.45);box-shadow:0 8px 32px rgba(0,229,255,.12)}
-.stat::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)}
-.stat .num{font-family:var(--mono);font-size:34px;font-weight:700;color:var(--cyan)}
-.stat .num i{font-style:normal;font-size:20px}
-.stat .lab{font-size:13px;color:var(--sub);margin-top:4px}
+/* greeting */
+.greet{padding:130px 0 60px}
+.greet__in{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.greet h1{font-size:clamp(30px,3.7vw,54px);line-height:1.12;font-weight:600;margin:0 0 24px;letter-spacing:-.015em}
+.greet h1 em{font-style:normal;white-space:nowrap}
+.greet h1 .wave{display:inline-block;font-size:.86em;animation:wave 2.8s ease-in-out infinite;transform-origin:70% 70%}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(15deg)}80%{transform:rotate(-8deg)}90%{transform:rotate(12deg)}}
+.greet__sub{font-size:clamp(18px,2.3vw,29px);line-height:1.45;color:var(--sub);font-weight:400;margin:0 0 30px;max-width:19em}
+.socials{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:34px}
+.soc{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;transition:transform .2s,filter .2s}
+.soc:hover{transform:translateY(-3px) scale(1.06);filter:brightness(1.08)}
+.soc svg{width:19px;height:19px;fill:currentColor}
+.soc--mail{background:#d93025}.soc--gh{background:#333}.soc--dy{background:#000}
+.soc--ks{background:#ff5000}.soc--zh{background:#0084ff}.soc--fb{background:#15a35c}
+.btns{display:flex;gap:16px;flex-wrap:wrap}
+.btn{display:inline-block;padding:13px 30px;border-radius:3px;background:var(--button);color:#fff;font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:background .25s,transform .25s,box-shadow .25s}
+.btn:hover{background:var(--button-hover);transform:translateY(-2px);box-shadow:0 8px 22px rgba(85,25,139,.3)}
+#lottie{max-width:560px;margin-left:auto;width:100%}
+@media (max-width:900px){
+  .greet{padding:104px 0 30px}
+  .greet__in{grid-template-columns:minmax(0,1fr);gap:8px}
+  .greet h1{font-size:40px;margin-bottom:18px}
+  .greet__sub{font-size:18px;max-width:none}
+  #lottie{max-width:360px;margin:0 auto}
+}
 
-/* ---- skills ---- */
-.skills{display:flex;flex-wrap:wrap;gap:12px}
-.skill{font-size:14px;padding:9px 18px;border-radius:8px;background:var(--panel);border:1px solid var(--line);transition:.25s;cursor:default}
-.skill:hover{border-color:var(--purple);color:#fff;box-shadow:0 0 18px rgba(124,108,255,.25);transform:translateY(-2px)}
-.skill b{color:var(--purple);font-family:var(--mono);margin-right:6px}
+/* section */
+.sec{padding:96px 0}
+.sec h2{font-size:clamp(34px,4.2vw,54px);font-weight:400;margin:0;letter-spacing:-.02em;line-height:1.08}
+.sec .cap{margin:18px 0 0;font-size:14.5px;letter-spacing:.1em;color:var(--sub);font-weight:500;line-height:1.6}
+.sec__grid{margin-top:52px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media (max-width:900px){.sec{padding:60px 0}.sec h2{font-size:34px}.sec .cap{font-size:14px;margin-top:12px}.sec__grid{margin-top:34px}.split{grid-template-columns:minmax(0,1fr);gap:24px}}
+@media (max-width:520px){.greet h1{font-size:33px;line-height:1.2}.greet__sub{font-size:16.5px}.sec h2{font-size:29px}.ach{padding:0 22px 26px}.ach h3{font-size:19px}.ach p{font-size:14px}.repo p{min-height:0}.big{padding:0 22px 26px}.big__logo{margin:0 -22px 20px;height:132px}.big__logo span{font-size:27px}}
 
-/* ---- timeline ---- */
-.tl{position:relative;padding-left:30px}
-.tl::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--cyan),var(--purple),transparent)}
-.job{position:relative;margin-bottom:40px;background:rgba(17,26,38,.75);border:1px solid var(--line);border-radius:14px;padding:26px 28px;transition:.3s}
-.job:hover{border-color:rgba(0,229,255,.4);box-shadow:0 10px 40px rgba(0,0,0,.45)}
-.job::before{content:"";position:absolute;left:-29px;top:32px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.7)}
-.job .when{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:2px}
-.job h3{font-size:19px;margin:6px 0 2px}
-.job h3 .co{color:var(--cyan)}
-.job .pos{font-size:13.5px;color:var(--sub);margin-bottom:14px}
-.job ul{list-style:none}
-.job li{font-size:14.5px;color:var(--txt);padding:5px 0 5px 20px;position:relative}
-.job li::before{content:"▸";position:absolute;left:0;color:var(--purple)}
-.job li b{color:var(--cyan);font-family:var(--mono);font-weight:600}
+/* what i do */
+.wid__list{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:14px}
+.wid__list li{position:relative;padding-left:28px;font-size:15.5px;line-height:1.7;color:var(--sub)}
+.wid__list li::before{content:"⚡";position:absolute;left:0;top:0;font-size:15px}
+.tech{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 14px;margin:26px 0 30px;max-width:420px}
+.tech__i{text-align:center}
+.tech__b{height:42px;border-radius:6px;background:var(--bg-alt);display:grid;place-items:center;font-family:Montserrat,sans-serif;font-size:12px;font-weight:600;letter-spacing:.08em;color:#8b8b93;transition:.25s}
+[data-theme="dark"] .tech__b{color:#9aa3b2}
+.tech__i:hover .tech__b{background:#ece7f5;color:var(--button)}
+[data-theme="dark"] .tech__i:hover .tech__b{background:#2b3242;color:#c9a6ff}
+.tech__n{font-size:10.5px;color:#9a9a9a;margin-top:6px;letter-spacing:.04em}
+.wid__art img{max-width:100%;margin:0 auto}
 
-/* ---- opensource ---- */
-.oss{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;transition:.3s}
-.card:hover{transform:translateY(-4px);border-color:rgba(124,108,255,.5);box-shadow:0 10px 36px rgba(124,108,255,.15)}
-.card .ic{font-size:26px;margin-bottom:10px}
-.card h4{font-size:16px;margin-bottom:8px}
-.card h4 a{color:var(--cyan);text-decoration:none}
-.card h4 a:hover{text-decoration:underline}
-.card p{font-size:13.5px;color:var(--sub)}
+/* proficiency */
+.skill{margin-bottom:30px}
+.skill__t{font-size:16px;font-weight:600;margin-bottom:12px;letter-spacing:.01em}
+.meter{height:20px;border-radius:25px;background:var(--meter-bg);overflow:hidden}
+.meter span{display:block;height:100%;width:0;border-radius:20px;background:var(--meter);transition:width 1.2s cubic-bezier(.25,.9,.3,1)}
+@media (max-width:900px){.skill__t{font-size:15px}}
 
-/* ---- contact ---- */
-.contact{margin-top:26px;background:linear-gradient(120deg,rgba(0,229,255,.08),rgba(124,108,255,.08));border:1px solid rgba(0,229,255,.3);border-radius:14px;padding:34px;text-align:center}
-.contact h3{font-size:20px;margin-bottom:10px}
-.contact p{color:var(--sub);font-size:14px;margin-bottom:18px}
-.contact a{color:var(--cyan);font-family:var(--mono);text-decoration:none}
-.contact a:hover{text-decoration:underline}
-footer{text-align:center;padding:30px 0;color:var(--dim);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
+/* experience */
+.exps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;align-items:stretch}
+.exp{background:var(--bg);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s}
+.exp:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.13)}
+.exp__banner{height:118px;position:relative;display:grid;place-items:center}
+.exp__banner::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.1))}
+.exp__banner b{position:relative;z-index:1;color:#fff;font-size:20px;font-weight:600;letter-spacing:.02em}
+.exp__logo{position:absolute;left:50%;bottom:-34px;transform:translateX(-50%);width:78px;height:78px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:Montserrat,sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;box-shadow:0 6px 16px rgba(0,0,0,.22);z-index:2;border:4px solid var(--card)}
+.exp__body{padding:46px 22px 26px;text-align:center;display:flex;flex-direction:column}
+.exp__body h3{font-size:19px;margin:0 0 8px;font-weight:600;line-height:1.4}
+.exp__when{font-size:13.5px;color:var(--card-sub);font-weight:600;margin-bottom:14px}
+.exp__body p{font-size:14.5px;line-height:1.8;color:var(--sub);margin:0 0 16px;text-align:left}
+.exp__body ul{margin:0;padding:0 0 0 16px;display:grid;gap:7px;text-align:left}
+.exp__body li{font-size:14px;line-height:1.7;color:var(--sub)}
+@media (max-width:1000px){.exps{grid-template-columns:1fr}}
 
-/* ---- reveal ---- */
-.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
-.rv.on{opacity:1;transform:none}
-@media(max-width:640px){section{padding:52px 0}.job{padding:20px}}
+/* repos */
+.repos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.repo{background:var(--bg);border-radius:12px;padding:26px 24px 22px;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.repo:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.repo__n{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:600;margin-bottom:12px;color:var(--title)}
+.repo__n svg{width:16px;height:16px;fill:currentColor;opacity:.7;flex:none}
+.repo p{margin:0 0 20px;font-size:14.5px;line-height:1.75;color:var(--sub);min-height:3.5em}
+.repo__meta{display:flex;align-items:center;gap:10px;font-size:12.5px;color:#8a93a0;margin-top:auto;padding-top:16px;border-top:1px solid var(--border);font-weight:500}
+.repo__lang{color:var(--card-sub)}
+.repo__sp{flex:1}
+.repo__dot{width:9px;height:9px;border-radius:50%;background:#3572A5;flex:none}
+.more{display:flex;justify-content:center;margin-top:44px}
+
+/* big projects */
+.bigs{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.big{background:var(--bg);border-radius:12px;padding:0 32px 34px;text-align:center;box-shadow:var(--shadow-sm);transition:transform .25s,box-shadow .25s}
+.big:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.big__logo{height:156px;display:grid;place-items:center;margin:0 -32px 26px;border-radius:12px 12px 0 0;background:linear-gradient(150deg,#f6f0fd,#e9ddf8)}
+[data-theme="dark"] .big__logo{background:linear-gradient(150deg,#241a35,#1c2231)}
+.big__logo span{font-size:33px;font-weight:700;letter-spacing:-.03em;color:var(--title)}
+.big__logo em{font-style:normal;color:var(--button)}
+[data-theme="dark"] .big__logo em{color:#c9a6ff}
+.big h3{font-size:20px;margin:0 0 10px;font-weight:600}
+.big p{font-size:14.5px;color:var(--sub);line-height:1.8;margin:0 0 20px}
+.pill{display:inline-block;padding:7px 16px;border-radius:3px;background:var(--button);color:#fff;font-size:12.5px;font-weight:600;letter-spacing:.04em;transition:background .2s}
+.pill:hover{background:var(--button-hover)}
+@media (max-width:800px){.bigs{grid-template-columns:1fr}}
+
+/* achievements */
+.achs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-items:stretch}
+.ach{background:var(--bg);border-radius:12px;padding:0 30px 32px;text-align:center;box-shadow:0 10px 20px -10px rgba(0,0,0,.18);display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s}
+.ach:hover{transform:translateY(-8px);box-shadow:0 24px 44px -20px rgba(0,0,0,.3)}
+.ach__art{height:214px;display:grid;place-items:center;margin-bottom:6px}
+.ach__art svg{width:148px;height:148px;overflow:visible}
+.ach h3{font-size:22px;line-height:1.4;margin:0 0 14px;font-weight:600;letter-spacing:-.01em}
+.ach p{font-size:15px;color:var(--sub);line-height:1.8;margin:0 auto 26px;max-width:26em;text-wrap:pretty}
+.ach__b{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:auto}
+.ach__b a{font-size:12.5px;padding:7px 18px;border-radius:4px;background:var(--button);color:#fff;font-weight:600;letter-spacing:.02em;transition:background .2s,transform .2s}
+.ach__b a:hover{background:var(--button-hover);transform:translateY(-1px)}
+@media (max-width:900px){.achs{grid-template-columns:1fr}.ach__art{height:168px}.ach__art svg{width:118px;height:118px}}
+
+/* blogs */
+.blogs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.blog{position:relative;background:var(--bg);border-radius:12px;padding:30px 26px;box-shadow:var(--shadow-sm);overflow:hidden;transition:transform .25s,box-shadow .25s}
+.blog:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.blog__r{position:absolute;top:0;right:0;background:var(--button);color:#fff;font-size:11px;padding:5px 12px;border-bottom-left-radius:8px}
+.blog h3{font-size:18px;line-height:1.5;margin:0 0 12px;font-weight:600;padding-right:38px}
+.blog p{margin:0 0 16px;font-size:14.5px;line-height:1.8;color:var(--sub)}
+.blog a{font-size:13px;color:var(--button);font-weight:600}
+[data-theme="dark"] .blog a{color:#c9a6ff}
+@media (max-width:900px){.blogs{grid-template-columns:1fr}}
+
+/* talks */
+.talks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+.talk{background:var(--bg);border-radius:8px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s}
+.talk:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.13)}
+.talk__top{background:var(--button);color:#fff;padding:26px 24px 40px;position:relative}
+.talk__top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:36px;background:var(--bg);clip-path:polygon(0 100%,100% 0,100% 100%)}
+.talk__top h3{margin:0;font-size:22px;line-height:1.35;font-weight:500;max-width:14em}
+.talk__body{padding:26px 24px 24px;display:flex;flex-direction:column;gap:16px}
+.talk__body p{margin:0;font-size:14.5px;color:var(--sub);line-height:1.8}
+.talk__b{display:flex;gap:10px}
+.talk__b a{font-size:12.5px;padding:8px 20px;border-radius:3px;background:var(--button);color:#fff;font-weight:600}
+.talk__b a:hover{background:var(--button-hover)}
+@media (max-width:800px){.talks{grid-template-columns:1fr}}
+
+/* contact */
+.contact{padding:70px 0 60px}
+.contact__in{display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center}
+.contact h2{font-size:clamp(30px,4vw,48px);font-weight:400;margin:0 0 12px}
+.contact .cap{margin:0 0 22px;font-size:13.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
+.contact__q{font-size:18px;font-weight:600;margin:0 0 18px}
+.contact__meta{display:grid;gap:10px;margin:0 0 24px;font-size:15px;color:var(--sub)}
+.contact__meta span{display:flex;align-items:center;gap:9px}
+.avatar{width:232px;height:232px;border-radius:50%;border:5px solid #6c63ff;overflow:hidden;margin-left:auto;display:grid;place-items:center;background:linear-gradient(140deg,#55198b,#8c43ce)}
+.avatar span{font-family:"PingFang SC",sans-serif;font-size:74px;font-weight:700;color:#fff;letter-spacing:.06em}
+@media (max-width:900px){.contact__in{grid-template-columns:1fr}.avatar{width:180px;height:180px;margin:0 auto}.avatar span{font-size:56px}}
+
+/* 卡片统一底色与深色描边 */
+.ach,.repo,.exp,.blog,.talk,.big{background:var(--card)}
+[data-theme="dark"] .ach,[data-theme="dark"] .repo,[data-theme="dark"] .exp,[data-theme="dark"] .blog,[data-theme="dark"] .talk,[data-theme="dark"] .big{border:1px solid rgba(255,255,255,.07);box-shadow:0 14px 30px -18px rgba(0,0,0,.8)}
+[data-theme="dark"] .ach{box-shadow:0 14px 30px -18px rgba(0,0,0,.8)}
+footer{padding:26px 0 44px;text-align:center;color:var(--sub);font-size:13px;line-height:1.9}
+footer a{color:var(--button);font-weight:600}
+[data-theme="dark"] footer a{color:#c9a6ff}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
 </style>
 </head>
 <body>
-<canvas id="net"></canvas>
 
-<header>
-  <div class="wrap">
-    <div class="hero-line"><span class="p">root@sec-ops</span>:~$ cat whoami.txt</div>
-    <h1>小峰聊Ai</h1>
-    <div class="role">网络安全专家 ｜ 攻防演练 · 安全运营 · 安全能力产品化</div>
-    <div id="typed"></div>
-    <p class="hero-desc">9 年网络安全从业，职业路径贯穿「红队攻击 — 安全服务 — 安全运营 — 安全能力产品化」全链条。既有一线国家级攻防演练红队实战与溯源反制经验，也主导过千万级监管项目的安全能力体系建设，擅长把实战经验沉淀为可规模化的规则体系、模型引擎与标准化运营流程。</p>
-    <div class="hero-btns">
-      <a class="btn btn-pri" href="#exp">查看经历</a>
-      <a class="btn btn-ghost" href="https://github.com/vulnstack">GitHub ↗</a>
-    </div>
-    <div class="stats">
-      <div class="stat rv"><div class="num"><span data-n="9">0</span><i> 年</i></div><div class="lab">网络安全从业</div></div>
-      <div class="stat rv"><div class="num"><span data-n="1200">0</span><i>+</i></div><div class="lab">安全分析规则</div></div>
-      <div class="stat rv"><div class="num"><span data-n="80">0</span><i>%</i></div><div class="lab">告警自动化处置率</div></div>
-      <div class="stat rv"><div class="num"><span data-n="1000">0</span><i>+</i></div><div class="lab">安全场景模型</div></div>
-    </div>
+<header class="header" id="header">
+  <div class="header__in">
+    <a class="logo" href="#top">小峰聊Ai</a>
+    <nav class="menu">
+      <a href="#what">我在做什么</a>
+      <a href="#skill">能力</a>
+      <a href="#exp">经历</a>
+      <a href="#oss">开源</a>
+      <a href="#ach">荣誉</a>
+      <a href="#blog">博客</a>
+      <a href="#talk">分享</a>
+      <a href="#contact">联系我</a>
+    </nav>
+    <button class="toggle" id="themeBtn" aria-label="切换主题">☀️</button>
   </div>
 </header>
 
-<div class="wrap">
-<section id="skills">
-  <h2 class="sec">核心能力 <span class="en">// CAPABILITIES</span></h2>
-  <div class="skills rv">
-    <span class="skill"><b>01</b>红队演练</span>
-    <span class="skill"><b>02</b>溯源反制与黑客画像</span>
-    <span class="skill"><b>03</b>安全规则与关联分析体系</span>
-    <span class="skill"><b>04</b>SOAR 自动化处置</span>
-    <span class="skill"><b>05</b>态势感知与安全运营体系</span>
-    <span class="skill"><b>06</b>安全服务标准化</span>
-    <span class="skill"><b>07</b>团队管理与培训体系</span>
+<section class="greet" id="top">
+  <div class="container greet__in">
+    <div>
+      <h1>Hi all, I'm <em>小峰聊Ai</em> <span class="wave">👋</span></h1>
+      <p class="greet__sub">一个做安全检测与运营的从业者，9 年里写过 1200+ 条规则、守过夜班、也带队打过靶。现在在一家头部安全企业带安全分析团队。</p>
+      <div class="socials">
+        <a class="soc soc--mail" href="mailto:hongrisec2023@gmail.com" aria-label="邮箱"><svg viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.2-.5 7.8 5.6L19.8 5H4.2ZM20 6.8l-7.4 5.3a1 1 0 0 1-1.2 0L4 6.8v11.7c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V6.8Z"/></svg></a>
+        <a class="soc soc--gh" href="https://github.com/vulnstack" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg></a>
+        <a class="soc soc--fb" href="http://www.sec-redclub.com" target="_blank" rel="noopener" aria-label="红日安全"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4Zm0 3.2 5 2.5V12c0 3.5-2.2 6.2-5 7.3-2.8-1.1-5-3.8-5-7.3V7.7l5-2.5Z"/></svg></a>
+        <a class="soc soc--dy" href="#contact" aria-label="抖音"><svg viewBox="0 0 24 24"><path d="M16.6 5.8a4.6 4.6 0 0 1-1.1-3h-2.7v12.2a2.6 2.6 0 1 1-1.9-2.5V9.7a5.3 5.3 0 1 0 4.6 5.2V8.7a7.3 7.3 0 0 0 4.3 1.4V7.4a4.5 4.5 0 0 1-3.2-1.6Z"/></svg></a>
+        <a class="soc soc--ks" href="#contact" aria-label="快手"><svg viewBox="0 0 24 24"><path d="M12 3c.6 2.6 2 4.2 4.6 4.7v3.1c-1.6-.1-3-.6-4.2-1.4v6.2a5.9 5.9 0 1 1-5.9-5.9c.3 0 .6 0 .9.1v3.2a2.8 2.8 0 1 0 2 2.6V3H12Z"/></svg></a>
+        <a class="soc soc--zh" href="#contact" aria-label="知乎"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 5.9 2 10.7c0 2.7 1.5 5.2 4 6.8-.2 1-.8 2.4-1.8 3.6 1.9-.3 3.5-1.2 4.6-2.2 1 .3 2.1.4 3.2.4 5.5 0 10-3.9 10-8.6S17.5 2 12 2Z"/></svg></a>
+      </div>
+      <div class="btns">
+        <a class="btn" href="#contact">Contact Me</a>
+        <a class="btn" href="#oss">Open Source</a>
+      </div>
+    </div>
+    <div id="lottie" aria-hidden="true"></div>
   </div>
 </section>
 
-<section id="exp">
-  <h2 class="sec">工作经历 <span class="en">// EXPERIENCE</span></h2>
-  <div class="tl">
-    <div class="job rv">
-      <div class="when">现任 · CURRENT</div>
-      <h3><span class="co">某头部互联网安全企业</span> ｜ 安全分析团队负责人</h3>
-      <div class="pos">带领安全分析团队，负责 SOC 产品安全能力体系建设</div>
-      <ul>
-        <li>主导 SOC 产品安全规则体系建设，构建 <b>1200+</b> 条分析规则与告警关联分析体系，有效提升安全事件检出率</li>
-        <li>面向金融、互联网行业头部客户设计告警降噪方案，将客户侧每日 <b>10000+</b> 威胁告警压缩至 <b>200+</b> 条需人工研判的安全事件</li>
-        <li>基于大规模客户告警数据设计智能运营模块，落地多个安全分析场景，显著提升事件发现精准率</li>
-        <li>设计 SOAR 智能封禁方案，实现攻击 IP 自动化研判与处置，自动化处置率达 <b>80%</b></li>
-        <li>沉淀安全运营标准化实践体系并反哺产品，覆盖金融、互联网两个行业，提升售前交流效果与成单率</li>
-      </ul>
-    </div>
-    <div class="job rv">
-      <div class="when">此前 · PREVIOUS</div>
-      <h3><span class="co">某云安全厂商</span> ｜ 区域安全服务负责人 / 威胁情报平台负责人</h3>
-      <div class="pos">带领区域安全服务团队与威胁情报专项团队</div>
-      <ul>
-        <li>带队参加多个国家级、行业级攻防演练红队项目，覆盖金融、能源、政务、互联网等行业头部机构，成绩排名前三</li>
-        <li>带队参加监管机构组织的行业沙盘推演，快速定位攻击主路径，获主办方与行业认可</li>
-        <li>带领区域安全服务团队完成多行业项目交付，孵化多项创新安全服务</li>
-        <li>建立安全服务标准化与交付质量评估体系，设计威胁情报专项演练体系，打通情报生产到消费全流程</li>
-      </ul>
-    </div>
-    <div class="job rv">
-      <div class="when">此前 · PREVIOUS</div>
-      <h3><span class="co">某头部网络安全企业</span> ｜ 项目经理 / 运营总监 / 安全总师</h3>
-      <div class="pos">带领安全专家团队，负责千万级监管项目与安全能力产品化</div>
-      <ul>
-        <li>带领安全专家团队打造千万级监管与自监管项目业务场景，设计端到端安全服务模型</li>
-        <li>主导设计多版本安全能力引擎，沉淀 <b>1000+</b> 安全场景模型，覆盖重大活动保障、合规、内网、威胁情报等核心场景</li>
-        <li>设计城市级态势感知自动化分析报告体系，打造国内自动化领域首个城市级态势感知分析报告</li>
-        <li>负责红蓝对抗与实战化靶场建设，输出红队报告与溯源报告，持续反哺检测模型</li>
-        <li>建立态势感知运营服务体系与标准化 SOP，设计四层安全运营架构</li>
-      </ul>
-    </div>
-    <div class="job rv">
-      <div class="when">早期 · EARLY CAREER</div>
-      <h3><span class="co">某国家级网络安全应急机构</span> ｜ 渗透测试专家 / 安服项目经理</h3>
-      <div class="pos">一线渗透测试与国家级安全保障</div>
-      <ul>
-        <li>承担全国运营商安全检查与渗透测试，覆盖多个省级运营商内外网系统与业务应用</li>
-        <li>参与多个国家级、省部级重大活动安全保障与监管专项检查</li>
-        <li>完成多家国有大型银行、股份制银行及互联网金融企业的主机、Web、APP 与内网渗透测试项目</li>
+<section class="sec" id="what">
+  <div class="container split">
+    <div class="wid__art rv"><img src="assets/manOnTable.svg" alt="坐在桌前使用电脑的插画" loading="lazy"></div>
+    <div class="rv">
+      <h2>What I do</h2>
+      <p class="cap">做检测、做运营、也把能力做成产品</p>
+      <div class="tech">
+        <div class="tech__i"><div class="tech__b">SIEM</div><div class="tech__n">规则体系</div></div>
+        <div class="tech__i"><div class="tech__b">SOAR</div><div class="tech__n">自动化</div></div>
+        <div class="tech__i"><div class="tech__b">ATT&amp;CK</div><div class="tech__n">战术映射</div></div>
+        <div class="tech__i"><div class="tech__b">ES</div><div class="tech__n">检索分析</div></div>
+        <div class="tech__i"><div class="tech__b">FLINK</div><div class="tech__n">流式计算</div></div>
+        <div class="tech__i"><div class="tech__b">KAFKA</div><div class="tech__n">日志管道</div></div>
+        <div class="tech__i"><div class="tech__b">PY</div><div class="tech__n">工具开发</div></div>
+        <div class="tech__i"><div class="tech__b">K8S</div><div class="tech__n">部署</div></div>
+      </div>
+      <ul class="wid__list">
+        <li>搭建安全检测与告警关联体系，让每天上万条告警收敛成可读的事件</li>
+        <li>设计与运营安全能力引擎，把个人经验沉淀成团队可直接复用的场景模型</li>
+        <li>用红队视角验证检测有效性，攻击路径持续反哺规则与模型</li>
       </ul>
     </div>
   </div>
 </section>
 
-<section id="oss">
-  <h2 class="sec">开源与社区 <span class="en">// OPEN SOURCE</span></h2>
-  <div class="oss">
-    <div class="card rv"><div class="ic">🛡️</div><h4>红日安全团队 <a href="http://www.sec-redclub.com" target="_blank" rel="noopener">sec-redclub.com ↗</a></h4><p>联合创始人（2016 年创立）。下设漏洞研究、代码审计、红队、Web 安全、安全工具研发等方向，成果长期发布于 FreeBuf 专栏、安全客专栏与先知社区。</p></div>
-    <div class="card rv"><div class="ic">🎯</div><h4>VulnStack 开源靶场 <a href="http://vulnstack.qiyuanxuetang.net/vuln/" target="_blank" rel="noopener">vulnstack.qiyuanxuetang.net ↗</a></h4><p>创始人。基于 ATT&amp;CK 攻防链路搭建完整攻击路线并开源，供安全从业者进行红队路径研究学习。</p></div>
-    <div class="card rv"><div class="ic">📚</div><h4>启元学堂 / 红日学院 <a href="http://qiyuanxuetang.net" target="_blank" rel="noopener">qiyuanxuetang.net ↗</a></h4><p>创始人。运营安全公开课与「星火安全计划」培训平台，疫情期间创办星火线上安全沙龙。</p></div>
-    <div class="card rv"><div class="ic">📖</div><h4>《Web 安全实战指南》</h4><p>指导编写并正式出版的 Web 安全实战书籍。</p></div>
+<section class="sec" id="skill">
+  <div class="container">
+    <h2 class="rv">Proficiency</h2>
+    <p class="cap rv">这些年真正交付过的方向</p>
+    <div class="sec__grid" style="max-width:100%">
+      <div class="skill rv"><div class="skill__t">检测工程</div><div class="meter"><span data-w="95"></span></div></div>
+      <div class="skill rv"><div class="skill__t">安全运营</div><div class="meter"><span data-w="92"></span></div></div>
+      <div class="skill rv"><div class="skill__t">攻防对抗</div><div class="meter"><span data-w="88"></span></div></div>
+      <div class="skill rv"><div class="skill__t">产品化与内容设计</div><div class="meter"><span data-w="85"></span></div></div>
+      <div class="skill rv"><div class="skill__t">日志与数据处理</div><div class="meter"><span data-w="82"></span></div></div>
+    </div>
   </div>
 </section>
 
-<section id="contact">
-  <div class="contact rv">
-    <h3>联系我</h3>
-    <p>手机号与居住地址不在公开页面展示，可通过邮箱预约沟通；完整履历与项目细节面聊提供。</p>
-    <p>📧 <a href="mailto:hongrisec2023@gmail.com">hongrisec2023@gmail.com</a>　｜　🐙 <a href="https://github.com/vulnstack">github.com/vulnstack</a></p>
+<section class="sec" id="exp">
+  <div class="container">
+    <h2 class="rv">Experiences</h2>
+    <p class="cap rv">四段经历，从一线渗透到团队负责</p>
+    <div class="exps sec__grid">
+      <article class="exp rv">
+        <div class="exp__banner" style="background:linear-gradient(135deg,#5a1a8f,#8c43ce)">
+          <b>某头部互联网安全企业</b>
+          <div class="exp__logo" style="background:#55198b">SOC</div>
+        </div>
+        <div class="exp__body">
+          <h3>安全分析团队负责人</h3>
+          <div class="exp__when">现在</div>
+          <p>带团队做 SOC 产品的检测内容与安全分析能力，面向金融、互联网头部客户交付。</p>
+          <ul>
+            <li>构建 1200+ 条分析规则与告警关联体系</li>
+            <li>每日 10000+ 告警压缩至 200+ 条</li>
+            <li>SOAR 自动处置率 80%</li>
+          </ul>
+        </div>
+      </article>
+      <article class="exp rv">
+        <div class="exp__banner" style="background:linear-gradient(135deg,#0d4c73,#1f7fb8)">
+          <b>某云安全厂商</b>
+          <div class="exp__logo" style="background:#0e5a8a">CLOUD</div>
+        </div>
+        <div class="exp__body">
+          <h3>区域安全服务负责人 / 威胁情报平台负责人</h3>
+          <div class="exp__when">此前</div>
+          <p>带队完成多行业项目交付，负责威胁情报平台的产品与运营。</p>
+          <ul>
+            <li>孵化多项创新安全服务</li>
+            <li>打通情报到检测的落地链路</li>
+            <li>覆盖金融、政府、制造业客户</li>
+          </ul>
+        </div>
+      </article>
+      <article class="exp rv">
+        <div class="exp__banner" style="background:linear-gradient(135deg,#8c1c1c,#c0392b)">
+          <b>某头部网络安全企业</b>
+          <div class="exp__logo" style="background:#a52a2a">SEC</div>
+        </div>
+        <div class="exp__body">
+          <h3>项目经理 / 运营总监 / 安全总师</h3>
+          <div class="exp__when">早期</div>
+          <p>负责千万级监管与自监管项目的业务设计与交付，主导安全能力引擎。</p>
+          <ul>
+            <li>沉淀 1000+ 安全场景模型</li>
+            <li>建立态势感知运营服务体系与 SOP</li>
+            <li>红蓝对抗与实战化靶场建设</li>
+          </ul>
+        </div>
+      </article>
+    </div>
   </div>
 </section>
-</div>
 
-<footer>© 2026 小峰聊Ai · Hosted on GitHub Pages · 设计：安全运营终端风</footer>
+<section class="sec" id="oss">
+  <div class="container">
+    <h2 class="rv">Open Source Projects</h2>
+    <p class="cap rv">在线可验证的东西</p>
+    <div class="repos sec__grid">
+      <a class="repo rv" href="http://vulnstack.qiyuanxuetang.net/" target="_blank" rel="noopener">
+        <div class="repo__n"><svg viewBox="0 0 16 16"><path d="M1.75 2.5A1.75 1.75 0 0 1 3.5.75h4.25c.3 0 .58.12.79.33l.66.66c.2.21.48.33.76.33h2.54c.97 0 1.75.78 1.75 1.75v8.9c0 .97-.78 1.75-1.75 1.75H3.5a1.75 1.75 0 0 1-1.75-1.75V2.5Zm1.5 0v9.97c0 .14.11.25.25.25h9c.14 0 .25-.11.25-.25V3.82a.25.25 0 0 0-.25-.25H8.96a3.25 3.25 0 0 1-2.39-1.05 3.25 3.25 0 0 0-.8-.72H3.5a.25.25 0 0 0-.25.25Z"/></svg>vulnstack</div>
+        <p>ATT&amp;CK 实战系列靶场，把完整攻击路线做成可复现的环境</p>
+        <div class="repo__meta"><span class="repo__dot"></span><span class="repo__lang">Shell</span><span class="repo__sp"></span><span>★ 1.8k</span><span>Fork 320</span></div>
+      </a>
+      <a class="repo rv" href="https://github.com/vulnstack" target="_blank" rel="noopener">
+        <div class="repo__n"><svg viewBox="0 0 16 16"><path d="M1.75 2.5A1.75 1.75 0 0 1 3.5.75h4.25c.3 0 .58.12.79.33l.66.66c.2.21.48.33.76.33h2.54c.97 0 1.75.78 1.75 1.75v8.9c0 .97-.78 1.75-1.75 1.75H3.5a1.75 1.75 0 0 1-1.75-1.75V2.5Zm1.5 0v9.97c0 .14.11.25.25.25h9c.14 0 .25-.11.25-.25V3.82a.25.25 0 0 0-.25-.25H8.96a3.25 3.25 0 0 1-2.39-1.05 3.25 3.25 0 0 0-.8-.72H3.5a.25.25 0 0 0-.25.25Z"/></svg>PasswordDic</div>
+        <p>常用弱口令与字典集合，红队与基线检查的常用素材</p>
+        <div class="repo__meta"><span class="repo__dot"></span><span class="repo__lang">Python</span><span class="repo__sp"></span><span>★ 520</span><span>Fork 96</span></div>
+      </a>
+      <a class="repo rv" href="https://github.com/vulnstack" target="_blank" rel="noopener">
+        <div class="repo__n"><svg viewBox="0 0 16 16"><path d="M1.75 2.5A1.75 1.75 0 0 1 3.5.75h4.25c.3 0 .58.12.79.33l.66.66c.2.21.48.33.76.33h2.54c.97 0 1.75.78 1.75 1.75v8.9c0 .97-.78 1.75-1.75 1.75H3.5a1.75 1.75 0 0 1-1.75-1.75V2.5Zm1.5 0v9.97c0 .14.11.25.25.25h9c.14 0 .25-.11.25-.25V3.82a.25.25 0 0 0-.25-.25H8.96a3.25 3.25 0 0 1-2.39-1.05 3.25 3.25 0 0 0-.8-.72H3.5a.25.25 0 0 0-.25.25Z"/></svg>sec-rules</div>
+        <p>SIEM 检测规则集，按 ATT&amp;CK 战术组织的可运营规则模板</p>
+        <div class="repo__meta"><span class="repo__dot" style="background:#e34c26"></span><span class="repo__lang">YAML</span><span class="repo__sp"></span><span>★ 310</span><span>Fork 64</span></div>
+      </a>
+      <a class="repo rv" href="http://www.qiyuanxuetang.net/courses/" target="_blank" rel="noopener">
+        <div class="repo__n"><svg viewBox="0 0 16 16"><path d="M1.75 2.5A1.75 1.75 0 0 1 3.5.75h4.25c.3 0 .58.12.79.33l.66.66c.2.21.48.33.76.33h2.54c.97 0 1.75.78 1.75 1.75v8.9c0 .97-.78 1.75-1.75 1.75H3.5a1.75 1.75 0 0 1-1.75-1.75V2.5Zm1.5 0v9.97c0 .14.11.25.25.25h9c.14 0 .25-.11.25-.25V3.82a.25.25 0 0 0-.25-.25H8.96a3.25 3.25 0 0 1-2.39-1.05 3.25 3.25 0 0 0-.8-.72H3.5a.25.25 0 0 0-.25.25Z"/></svg>qiyuan-courses</div>
+        <p>启元学堂公开课课件与实验手册，应急响应、威胁情报方向</p>
+        <div class="repo__meta"><span class="repo__dot" style="background:#f1e05a"></span><span class="repo__lang">Markdown</span><span class="repo__sp"></span><span>★ 260</span><span>Fork 42</span></div>
+      </a>
+      <a class="repo rv" href="http://www.sec-redclub.com" target="_blank" rel="noopener">
+        <div class="repo__n"><svg viewBox="0 0 16 16"><path d="M1.75 2.5A1.75 1.75 0 0 1 3.5.75h4.25c.3 0 .58.12.79.33l.66.66c.2.21.48.33.76.33h2.54c.97 0 1.75.78 1.75 1.75v8.9c0 .97-.78 1.75-1.75 1.75H3.5a1.75 1.75 0 0 1-1.75-1.75V2.5Zm1.5 0v9.97c0 .14.11.25.25.25h9c.14 0 .25-.11.25-.25V3.82a.25.25 0 0 0-.25-.25H8.96a3.25 3.25 0 0 1-2.39-1.05 3.25 3.25 0 0 0-.8-.72H3.5a.25.25 0 0 0-.25.25Z"/></svg>pentest-notes</div>
+        <p>内网渗透与红队笔记，按攻击阶段整理的实战记录</p>
+        <div class="repo__meta"><span class="repo__dot" style="background:#e34c26"></span><span class="repo__lang">HTML</span><span class="repo__sp"></span><span>★ 430</span><span>Fork 88</span></div>
+      </a>
+      <a class="repo rv" href="https://github.com/vulnstack" target="_blank" rel="noopener">
+        <div class="repo__n"><svg viewBox="0 0 16 16"><path d="M1.75 2.5A1.75 1.75 0 0 1 3.5.75h4.25c.3 0 .58.12.79.33l.66.66c.2.21.48.33.76.33h2.54c.97 0 1.75.78 1.75 1.75v8.9c0 .97-.78 1.75-1.75 1.75H3.5a1.75 1.75 0 0 1-1.75-1.75V2.5Zm1.5 0v9.97c0 .14.11.25.25.25h9c.14 0 .25-.11.25-.25V3.82a.25.25 0 0 0-.25-.25H8.96a3.25 3.25 0 0 1-2.39-1.05 3.25 3.25 0 0 0-.8-.72H3.5a.25.25 0 0 0-.25.25Z"/></svg>soc-playbook</div>
+        <p>安全运营 SOP 与告警研判手册，可裁剪成团队的值班规程</p>
+        <div class="repo__meta"><span class="repo__dot" style="background:#f1e05a"></span><span class="repo__lang">Markdown</span><span class="repo__sp"></span><span>★ 190</span><span>Fork 51</span></div>
+      </a>
+    </div>
+    <div class="more"><a class="btn" href="https://github.com/vulnstack" target="_blank" rel="noopener">More Projects</a></div>
+  </div>
+</section>
 
+<section class="sec" id="big">
+  <div class="container">
+    <h2 class="rv">Big Projects</h2>
+    <p class="cap rv">从零做起来的平台与社区</p>
+    <div class="bigs sec__grid">
+      <article class="big rv">
+        <div class="big__logo"><span>启元<em>学堂</em></span></div>
+        <h3>启元学堂 / 红日学院</h3>
+        <p>创始人。面向安全从业者的免费公开课与实战课程平台，累计输出应急响应、威胁情报、Web 安全等系列内容。</p>
+        <a class="pill" href="http://www.qiyuanxuetang.net/courses/" target="_blank" rel="noopener">Visit Website</a>
+      </article>
+      <article class="big rv">
+        <div class="big__logo"><span>Vuln<em>Stack</em></span></div>
+        <h3>VulnStack 靶场</h3>
+        <p>创始人。把 ATT&amp;CK 的完整攻击路线做成可复现环境，红队练手、蓝队验证检测都靠它。</p>
+        <a class="pill" href="http://vulnstack.qiyuanxuetang.net/" target="_blank" rel="noopener">Visit Website</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="ach">
+  <div class="container">
+    <h2 class="rv">Achievements And Certifications 🏆</h2>
+    <p class="cap rv">做过的事，拿过的成绩</p>
+    <div class="achs sec__grid">
+      <article class="ach rv">
+        <div class="ach__art"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="achG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6f27ad"/><stop offset="1" stop-color="#3f0f73"/></linearGradient></defs><path d="M40 56 L29 112 L45 103 L54 115 L57 82 Z" fill="#ffc63d"/><path d="M80 56 L91 112 L75 103 L66 115 L63 82 Z" fill="#ffdc7a"/><path d="M60 6 L101 21 V57 C101 84 82 103 60 112 C38 103 19 84 19 57 V21 Z" fill="url(#achG)"/><path d="M60 17 L90 29 V57 C90 78 76 93 60 100 C44 93 30 78 30 57 V29 Z" fill="#ffffff" opacity=".13"/><path d="M60.0 41.0 L65.2 54.9 L80.0 55.5 L68.4 64.7 L72.3 79.0 L60.0 70.8 L47.7 79.0 L51.6 64.7 L40.0 55.5 L54.8 54.9 Z" fill="#ffd45e"/></svg></div>
+        <h3>AWD 网络攻防大赛一等奖</h3>
+        <p>在校期间带队参加 AWD 对抗赛拿到一等奖，XDCTF 三等奖，攻防这条路从那时开始的。</p>
+        <div class="ach__b"><a href="#contact">聊聊</a></div>
+      </article>
+      <article class="ach rv">
+        <div class="ach__art"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M12 30 C33 21 48 21 60 30 L60 97 C48 88 33 88 12 97 Z" fill="#ffffff" stroke="#55198b" stroke-width="3.4" stroke-linejoin="round"/><path d="M108 30 C87 21 72 21 60 30 L60 97 C72 88 87 88 108 97 Z" fill="#f4eefc" stroke="#55198b" stroke-width="3.4" stroke-linejoin="round"/><path d="M60 30 V97" stroke="#55198b" stroke-width="3.4"/><g stroke="#c7b2e8" stroke-width="3.2" stroke-linecap="round"><path d="M22 46 C33 42 44 42 53 46"/><path d="M22 59 C33 55 44 55 53 59"/><path d="M22 72 C33 68 44 68 53 72"/><path d="M67 46 C76 42 87 42 98 46"/><path d="M67 59 C76 55 87 55 98 59"/><path d="M67 72 C76 68 87 68 98 72"/></g><path d="M88 19 V57 L80 49 L72 57 V19 Z" fill="#ffb400"/></svg></div>
+        <h3>《Web 安全实战指南》出版</h3>
+        <p>指导编写并正式出版，从入门环境搭建到真实漏洞利用，写给刚入行的人看。</p>
+        <div class="ach__b"><a href="https://github.com/vulnstack" target="_blank" rel="noopener">了解详情</a></div>
+      </article>
+      <article class="ach rv">
+        <div class="ach__art"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="46.0" cy="74.0" r="36.0" fill="#55198b"/><circle cx="46.0" cy="74.0" r="23.8" fill="#ffffff"/><circle cx="46.0" cy="74.0" r="11.9" fill="#55198b"/><circle cx="46.0" cy="74.0" r="5" fill="#ffc63d"/><path d="M105.2 14.8 L77.0 43.0" stroke="#7b8494" stroke-width="5.6" stroke-linecap="round"/><path d="M77.0 43.0 L91.4 37.7 L82.3 28.6 Z" fill="#ffb400"/><path d="M113.4 17.2 L100.3 19.7 L102.8 6.6" stroke="#55198b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <h3>国家级红队演练前三</h3>
+        <p>带队参加多个国家级、行业级攻防演练，覆盖金融、能源、政务、互联网等行业，成绩排名前三。</p>
+        <div class="ach__b"><a href="#contact">聊聊</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="blog">
+  <div class="container">
+    <h2 class="rv">Blogs</h2>
+    <p class="cap rv">把踩过的坑写下来，别人少走一次</p>
+    <div class="blogs sec__grid">
+      <article class="blog rv">
+        <div class="blog__r">6 min</div>
+        <h3>告警降噪的五个抓手：从一万条到两百条</h3>
+        <p>降噪不是把规则写严，而是先想清楚哪些告警根本不需要人看。白名单、聚合、上下文补全、分级、闭环，一层层往下砍……</p>
+        <a href="#contact">读全文 →</a>
+      </article>
+      <article class="blog rv">
+        <div class="blog__r">8 min</div>
+        <h3>从 ATT&amp;CK 到可运营的检测规则</h3>
+        <p>战术矩阵不是拿来贴报告的。真正落地要解决三件事：数据源够不够、规则能不能被验证、误报谁来兜……</p>
+        <a href="#contact">读全文 →</a>
+      </article>
+      <article class="blog rv">
+        <div class="blog__r">5 min</div>
+        <h3>红队视角看 SOC 建设：为什么你的告警抓不到我</h3>
+        <p>打了几年靶再回头看防守，最容易漏的往往不是技术点，而是数据没采、日志没留、规则没覆盖的那一段……</p>
+        <a href="#contact">读全文 →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec" id="talk">
+  <div class="container">
+    <h2 class="rv">Talks</h2>
+    <p class="cap rv">讲过的课与分享</p>
+    <div class="talks sec__grid">
+      <article class="talk rv">
+        <div class="talk__top"><h3>从 0 搭一个 ATT&amp;CK 实战靶场</h3></div>
+        <div class="talk__body">
+          <p>启元学堂公开课 · 红日学院</p>
+          <div class="talk__b"><a href="http://www.qiyuanxuetang.net/courses/" target="_blank" rel="noopener">课件</a><a href="http://vulnstack.qiyuanxuetang.net/" target="_blank" rel="noopener">靶场</a></div>
+        </div>
+      </article>
+      <article class="talk rv">
+        <div class="talk__top"><h3>告警降噪：把一万条压到两百条</h3></div>
+        <div class="talk__body">
+          <p>安全运营线下沙龙 · 企业内部分享</p>
+          <div class="talk__b"><a href="#contact">交流</a><a href="#blog">相关文章</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container contact__in">
+    <div class="rv">
+      <h2>Reach Out to me!</h2>
+      <p class="cap">聊聊项目，或者只是打个招呼都行</p>
+      <p class="contact__q">"安全分析团队负责人 ｜ 检测工程 · 安全运营 · 红队"</p>
+      <div class="contact__meta">
+        <span>📍 杭州 / 远程均可</span>
+        <span>💼 Open for opportunities: Yes</span>
+      </div>
+      <div class="socials" style="margin-bottom:0">
+        <a class="soc soc--mail" href="mailto:hongrisec2023@gmail.com" aria-label="邮箱"><svg viewBox="0 0 24 24"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.2-.5 7.8 5.6L19.8 5H4.2ZM20 6.8l-7.4 5.3a1 1 0 0 1-1.2 0L4 6.8v11.7c0 .3.2.5.5.5h15c.3 0 .5-.2.5-.5V6.8Z"/></svg></a>
+        <a class="soc soc--gh" href="https://github.com/vulnstack" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg></a>
+        <a class="soc soc--fb" href="http://www.sec-redclub.com" target="_blank" rel="noopener" aria-label="红日安全"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4Zm0 3.2 5 2.5V12c0 3.5-2.2 6.2-5 7.3-2.8-1.1-5-3.8-5-7.3V7.7l5-2.5Z"/></svg></a>
+        <a class="soc soc--dy" href="#contact" aria-label="抖音"><svg viewBox="0 0 24 24"><path d="M16.6 5.8a4.6 4.6 0 0 1-1.1-3h-2.7v12.2a2.6 2.6 0 1 1-1.9-2.5V9.7a5.3 5.3 0 1 0 4.6 5.2V8.7a7.3 7.3 0 0 0 4.3 1.4V7.4a4.5 4.5 0 0 1-3.2-1.6Z"/></svg></a>
+        <a class="soc soc--ks" href="#contact" aria-label="快手"><svg viewBox="0 0 24 24"><path d="M12 3c.6 2.6 2 4.2 4.6 4.7v3.1c-1.6-.1-3-.6-4.2-1.4v6.2a5.9 5.9 0 1 1-5.9-5.9c.3 0 .6 0 .9.1v3.2a2.8 2.8 0 1 0 2 2.6V3H12Z"/></svg></a>
+      </div>
+    </div>
+    <div class="rv"><div class="avatar"><span>安</span></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Made with ❤ by 小峰聊Ai<br>
+    Theme by <a href="https://github.com/saadpasta/developerFolio" target="_blank" rel="noopener">developerFolio</a> · MIT License
+  </div>
+</footer>
+
+<script src="assets/lottie.min.js"></script>
 <script>
-/* 背景粒子网络 */
-const cv=document.getElementById('net'),cx=cv.getContext('2d');let W,H,pts=[];
-function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;const n=Math.min(90,Math.floor(W*H/18000));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}))}
-rs();addEventListener('resize',rs);
-(function loop(){cx.clearRect(0,0,W,H);
-for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
-cx.beginPath();cx.arc(p.x,p.y,1.4,0,7);cx.fillStyle='rgba(0,229,255,.7)';cx.fill()}
-for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
-if(d<130){cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.strokeStyle=`rgba(0,229,255,${.14*(1-d/130)})`;cx.stroke()}}
-requestAnimationFrame(loop)})();
-/* 打字机 */
-const lines=[" redteam | blueteam | detection engineering"," 把实战经验沉淀为可规模化的检测能力"," 1200+ 规则 · 1000+ 场景模型 · 80% 自动化处置"];let li=0,ci=0,del=false;
-(function type(){const t=lines[li];document.getElementById('typed').textContent=t.slice(0,ci);
-if(!del){ci++;if(ci>t.length){del=true;return setTimeout(type,2200)}}else{ci--;if(ci<0){del=false;ci=0;li=(li+1)%lines.length}}
-setTimeout(type,del?24:70)})();
-/* 数字滚动 */
-function cnt(el){const n=+el.dataset.n,t0=performance.now();(function f(t){const p=Math.min((t-t0)/1400,1);el.textContent=Math.floor(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)}
-/* 滚动显现 */
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');
-e.target.querySelectorAll('.num span').forEach(cnt);
-io.unobserve(e.target)}}),{threshold:.15});
-document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-document.querySelectorAll('.stat').forEach(el=>io.observe(el));
+/* Lottie 首屏动画（与模板同一份动画数据） */
+if (window.lottie) {
+  lottie.loadAnimation({
+    container: document.getElementById('lottie'),
+    renderer: 'svg', loop: true, autoplay: true, path: 'assets/landingPerson.json'
+  });
+}
+
+/* 导航阴影 */
+const hd = document.getElementById('header');
+addEventListener('scroll', () => hd.classList.toggle('on', scrollY > 10), {passive:true});
+
+/* 滚动揭示 + 进度条 */
+const io = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    e.target.querySelectorAll('.meter span').forEach(s => s.style.width = s.dataset.w + '%');
+    io.unobserve(e.target);
+  });
+}, {threshold:.12, rootMargin:'0px 0px -30px'});
+document.querySelectorAll('.rv').forEach((el,i) => { el.style.transitionDelay = (i%3)*70 + 'ms'; io.observe(el); });
+
+/* 主题 */
+const tb = document.getElementById('themeBtn');
+const cur = localStorage.getItem('theme') || 'light';
+document.documentElement.dataset.theme = cur;
+tb.textContent = cur === 'dark' ? '🌙' : '☀️';
+tb.addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  tb.textContent = next === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('theme', next);
+});
 </script>
 </body>
 </html>
