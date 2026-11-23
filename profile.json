@@ -1,0 +1,88 @@
+{
+  "data": {
+    "user": {
+      "id": "MDQ6VXNlcj92bWxuc3RhY2s=",
+      "name": "小峰聊Ai",
+      "bio": "9 年网络安全：检测规则 · 安全运营 · 红队对抗",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/00000000?v=4",
+      "location": "中国 · 杭州",
+      "pinnedItems": {
+        "totalCount": 6,
+        "edges": [
+          {
+            "node": {
+              "id": "R1",
+              "name": "vulnstack",
+              "url": "http://vulnstack.qiyuanxuetang.net/",
+              "description": "ATT&CK 实战系列靶场，把完整攻击路线做成可复现的环境",
+              "forkCount": 320,
+              "stargazers": { "totalCount": 1800 },
+              "diskUsage": 64,
+              "primaryLanguage": { "name": "Shell", "color": "#89e051" }
+            }
+          },
+          {
+            "node": {
+              "id": "R2",
+              "name": "PasswordDic",
+              "url": "https://github.com/vulnstack",
+              "description": "常用弱口令与字典集合，红队与基线检查的常用素材",
+              "forkCount": 96,
+              "stargazers": { "totalCount": 520 },
+              "diskUsage": 18,
+              "primaryLanguage": { "name": "Python", "color": "#3572A5" }
+            }
+          },
+          {
+            "node": {
+              "id": "R3",
+              "name": "sec-rules",
+              "url": "https://github.com/vulnstack",
+              "description": "SIEM 检测规则集，按 ATT&CK 战术组织的可运营规则模板",
+              "forkCount": 64,
+              "stargazers": { "totalCount": 310 },
+              "diskUsage": 6,
+              "primaryLanguage": { "name": "YAML", "color": "#cb171e" }
+            }
+          },
+          {
+            "node": {
+              "id": "R4",
+              "name": "qiyuan-courses",
+              "url": "http://www.qiyuanxuetang.net/courses/",
+              "description": "启元学堂公开课课件与实验手册，应急响应、威胁情报方向",
+              "forkCount": 42,
+              "stargazers": { "totalCount": 260 },
+              "diskUsage": 12,
+              "primaryLanguage": { "name": "Markdown", "color": "#083fa1" }
+            }
+          },
+          {
+            "node": {
+              "id": "R5",
+              "name": "pentest-notes",
+              "url": "https://github.com/vulnstack",
+              "description": "内网渗透与红队笔记，按攻击阶段整理的实战记录",
+              "forkCount": 88,
+              "stargazers": { "totalCount": 430 },
+              "diskUsage": 9,
+              "primaryLanguage": { "name": "HTML", "color": "#e34c26" }
+            }
+          },
+          {
+            "node": {
+              "id": "R6",
+              "name": "soc-playbook",
+              "url": "https://github.com/vulnstack",
+              "description": "安全运营 SOP 与告警研判手册，可裁剪成团队的值班规程",
+              "forkCount": 51,
+              "stargazers": { "totalCount": 190 },
+              "diskUsage": 4,
+              "primaryLanguage": { "name": "Markdown", "color": "#083fa1" }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
